@@ -18,11 +18,11 @@
 
 //#####################LOADCELL CONFIGURATION####################################
 // load cell wiring diagram
-// Load Cell		  HX711	  HX711	  ESP32
-// Red (E+)		    E+	    GND		  GND
-// Black (E-)		  E-		  DT		  GPIO 16
-// White (A-)		  A-		  SCK		  GPIO 4
-// Green (A+)		  A+		  VCC		  3.3V
+// Load Cell		    HX711	      HX711	      ESP32
+// Red (E+)		        E+	          GND		  GND
+// Black (E-)		    E-		      DT		  GPIO 16
+// White (A-)		    A-		      SCK		  GPIO 4
+// Green (A+)		    A+		      VCC		  3.3V
 
 const int LOADCELL_DOUT_PIN = 16;
 const int LOADCELL_SCK_PIN = 4;
@@ -43,7 +43,7 @@ const int echoPin = 18;
 const float BMI_UNDERWEIGHT_MAX = 18.5;
 const float BMI_NORMAL_MAX = 24.9; //healthy
 const float BMI_OVERWEIGHT_MAX = 29.9;
-
+const float MAX_HEIGHT = 7 * 0.3048;  // 1 foot = 0.3048 meters
 // Constants for sound speed and conversion factors
 #define SOUND_SPEED 0.035188  // Sound speed in cm/uS
 #define CM_TO_INCH 0.393701  // Conversion factor from cm to inches
@@ -123,7 +123,7 @@ void loop() {
     duration = pulseIn(echoPin, HIGH);
   
     // Convert height from cm to m  (/100 is for converting)
-    float heightMeters = 2.134 - (duration * SOUND_SPEED / (2 * 100));
+    float heightMeters = MAX_HEIGHT - (duration * SOUND_SPEED / (2 * 100));
     //if there is an error height measurement and it is showing a negative value then set the height to 0.0 meters
     if(heightMeters <= 0.0){
       heightMeters=0.0;
@@ -136,9 +136,17 @@ void loop() {
     }
     
 
-
+    float bmi;
     // Calculate BMI
-    float bmi = weightKg / (heightMeters * heightMeters); //weight in kg / ( height in meters )^2 
+    // if weight = 0.0 , then dividing by zero error is caused
+    if(heightMeters > 0.0){
+       bmi = weightKg / (heightMeters * heightMeters); //weight in kg / ( height in meters )^2 
+    }
+    else {
+      bmi = 0.0;
+      }
+
+   
 
     // Display Weight in kg in first row of LCD
    lcd.setCursor(8, 0);
