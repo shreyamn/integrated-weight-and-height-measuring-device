@@ -18,11 +18,11 @@
 
 //#####################LOADCELL CONFIGURATION####################################
 // load cell wiring diagram
-// Load Cell		    HX711	      HX711	      ESP32
-// Red (E+)		        E+	          GND		  GND
-// Black (E-)		    E-		      DT		  GPIO 16
-// White (A-)		    A-		      SCK		  GPIO 4
-// Green (A+)		    A+		      VCC		  3.3V
+// Load Cell		  HX711	  HX711	  ESP32
+// Red (E+)		    E+	    GND		  GND
+// Black (E-)		  E-		  DT		  GPIO 16
+// White (A-)		  A-		  SCK		  GPIO 4
+// Green (A+)		  A+		  VCC		  3.3V
 
 const int LOADCELL_DOUT_PIN = 16;
 const int LOADCELL_SCK_PIN = 4;
